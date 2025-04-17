@@ -1,0 +1,43 @@
+﻿@model List<Products>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Danh mục sản phẩm hiện có</h1>
+
+    <table id="productsTable">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Sizes</th>
+                <th>Colors</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var prod in Model)
+            {
+                <tr>
+                    <td>@prod.Id</td>
+                    <td>@prod.Name</td>
+                    <td>@prod.Description</td>
+                    <td>@prod.Sizes</td>
+                    <td>@prod.Colors</td>
+                    <td>@prod.Price</td>
+                    <td>@prod.Discount</td>
+                    <td>@prod.Rating</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+

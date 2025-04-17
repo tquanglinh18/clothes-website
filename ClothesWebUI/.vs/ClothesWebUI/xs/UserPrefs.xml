@@ -1,0 +1,36 @@
+﻿<Properties StartupConfiguration="{19FF6932-B694-4C60-AC85-1BCEC464A5DE}|Default">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.ClothesWebAPI FirstBuild="True" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ClothesWebAPI/AppDbContext/AppDbContext.cs">
+    <Files>
+      <File FileName="ClothesWebAPI/appsettings.json" Line="14" Column="1" />
+      <File FileName="ClothesWebAPI/Controllers/ProductsController.cs" Line="83" Column="27" />
+      <File FileName="ClothesWebAPI/Properties/launchSettings.json" Line="22" Column="29" />
+      <File FileName="ClothesWebAPI/AppDbContext/AppDbContext.cs" Line="17" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="ClothesWebUI" expanded="True">
+            <Node name="ClothesWebAPI" expanded="True">
+              <Node name="Dependencies" expanded="True">
+                <Node name="FrameworkReferences" expanded="True" />
+                <Node name="PackageDependencies" expanded="True" />
+              </Node>
+              <Node name="AppDbContext" expanded="True">
+                <Node name="AppDbContext.cs" selected="True" />
+              </Node>
+              <Node name="Models" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.ClothesWebUI PreferredExecutionTarget="/Applications/Google Chrome.app" FirstBuild="True" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+</Properties>
