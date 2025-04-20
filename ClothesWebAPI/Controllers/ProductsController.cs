@@ -47,7 +47,7 @@ namespace ClothesWebAPI.Controllers
         public IActionResult AddProducts([FromBody] Products product)
         {
             //Handle Case: Dữ liệu đầu vào chưa hợp lệ
-            if (string.IsNullOrWhiteSpace(product.Name) || product == null)
+            if (string.IsNullOrWhiteSpace(product.ProductName) || product == null)
             {
                 return BadRequest(new ResponseModels<Products>
                 {
@@ -59,7 +59,7 @@ namespace ClothesWebAPI.Controllers
             }
 
             //Handle Case: Nếu sản phẩm đã tồn tại
-            var existingProd = _dbContext.Products.FirstOrDefault(p => p.Name == product.Name);
+            var existingProd = _dbContext.Products.FirstOrDefault(p => p.ProductName == product.ProductName);
 
             if (existingProd != null)
             {
@@ -102,7 +102,7 @@ namespace ClothesWebAPI.Controllers
         [Route("/Products/Detail/{id}")]
         public IActionResult GetDetail(int id)
         {
-            var product = _dbContext.Products.FirstOrDefault(idItem => idItem.Id == id);
+            var product = _dbContext.Products.FirstOrDefault(idItem => idItem.ProductID == id);
 
             if (product == null)
             {
@@ -130,7 +130,7 @@ namespace ClothesWebAPI.Controllers
         [Route("/Products/Update/{id}")]
         public IActionResult UpdateProduct(int id, [FromBody] Products updatedProduct)
         {
-            var productCur = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+            var productCur = _dbContext.Products.FirstOrDefault(p => p.ProductID == id);
             if (productCur == null)
             {
                 return NotFound(new ResponseModels<Products>
@@ -145,28 +145,15 @@ namespace ClothesWebAPI.Controllers
             try
             {
                 // Cập nhật các trường (ưu tiên giữ giá trị cũ nếu client không truyền)
-                productCur.Name = updatedProduct.Name ?? productCur.Name;
+                productCur.ProductName = updatedProduct.ProductName ?? productCur.ProductName;
                 productCur.Description = updatedProduct.Description ?? productCur.Description;
-                productCur.Brand = updatedProduct.Brand ?? productCur.Brand;
-                productCur.Category = updatedProduct.Category ?? productCur.Category;
-                productCur.Gender = updatedProduct.Gender ?? productCur.Gender;
                 productCur.Price = updatedProduct.Price != 0 ? updatedProduct.Price : productCur.Price;
-                productCur.Discount = updatedProduct.Discount != 0 ? updatedProduct.Discount : productCur.Discount;
-                productCur.Sizes = updatedProduct.Sizes ?? productCur.Sizes;
-                productCur.Colors = updatedProduct.Colors ?? productCur.Colors;
-                productCur.Material = updatedProduct.Material ?? productCur.Material;
-                productCur.StockQuantity = updatedProduct.StockQuantity != 0 ? updatedProduct.StockQuantity : productCur.StockQuantity;
-                productCur.Images = updatedProduct.Images ?? productCur.Images;
-                productCur.IsNew = updatedProduct.IsNew;
-                productCur.IsFeatured = updatedProduct.IsFeatured;
-                productCur.Rating = updatedProduct.Rating ?? productCur.Rating;
-                productCur.CreatedAt = updatedProduct.CreatedAt ?? productCur.CreatedAt;
-                productCur.UpdatedAt = updatedProduct.UpdatedAt ?? DateTime.Now;
+                productCur.Quantity = updatedProduct.Quantity != 0 ? updatedProduct.Quantity : productCur.Quantity;
 
                 _dbContext.Products.Update(productCur);
                 _dbContext.SaveChanges();
 
-                var productLaster = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+                var productLaster = _dbContext.Products.FirstOrDefault(p => p.ProductID == id);
 
                 return Ok(new ResponseModels<Products>
                 {
@@ -192,7 +179,7 @@ namespace ClothesWebAPI.Controllers
         [Route("/Products/Delete/{id}")]
         public IActionResult DeleteProduct(int id)
         {
-            var product = _dbContext.Products.FirstOrDefault(idItem => idItem.Id == id);
+            var product = _dbContext.Products.FirstOrDefault(idItem => idItem.ProductID == id);
             if (product == null)
             {
                 return NotFound(new ResponseModels<Products>
@@ -237,7 +224,7 @@ namespace ClothesWebAPI.Controllers
 
             try
             {
-                var productsFilter = _dbContext.Products.Where(p => !string.IsNullOrEmpty(keyword) && p.Name.Contains(keyword)).ToList();
+                var productsFilter = _dbContext.Products.Where(p => !string.IsNullOrEmpty(keyword) && p.ProductName.Contains(keyword)).ToList();
 
                 if (productsFilter == null || !productsFilter.Any())
                 {

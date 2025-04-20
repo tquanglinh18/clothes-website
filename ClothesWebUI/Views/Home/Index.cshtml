@@ -8,17 +8,16 @@
 <div class="text-center">
     <h1 class="display-4">Danh mục sản phẩm hiện có</h1>
 
+    <a class="btn btn-primary" asp-action="Insert" asp-controller="Home">Thêm sản phẩm</a>
     <table id="productsTable">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Sizes</th>
-                <th>Colors</th>
                 <th>Price</th>
-                <th>Discount</th>
-                <th>Rating</th>
+                <th>Quantity</th>
+                <th>Action</th>
             </tr>
         </thead>
 
@@ -26,14 +25,14 @@
             @foreach (var prod in Model)
             {
                 <tr>
-                    <td>@prod.Id</td>
-                    <td>@prod.Name</td>
+                    <td>@prod.ProductID</td>
+                    <td>@prod.ProductName</td>
                     <td>@prod.Description</td>
-                    <td>@prod.Sizes</td>
-                    <td>@prod.Colors</td>
                     <td>@prod.Price</td>
-                    <td>@prod.Discount</td>
-                    <td>@prod.Rating</td>
+                    <td>@prod.Quantity</td>
+                    <td>
+                        <a asp-controller="Home" asp-action="Edit" asp-route-id="@prod.ProductID">Sửa</a>
+                    </td>
                 </tr>
             }
         </tbody>

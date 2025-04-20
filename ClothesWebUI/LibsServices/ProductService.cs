@@ -1,69 +1,112 @@
-﻿using System;
-using System.Text.Json;
-using ClothesWebAPI.Models;
-using ClothesWebUI.Models;
+﻿using ClothesWebUI.Models;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace ClothesWebUI.LibsServices
 {
     public class ProductService : IProductService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _baseAPI = "https://localhost:7167/";
 
         public ProductService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(_baseAPI);
         }
 
-        public Task<ResponseModels<List<Products>>> DeleteProducts(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ResponseModels<List<Products>>> GetAllProductsAsync()
+        public async Task<ResponseModels<List<Products>>> GetAllProducts()
         {
             var response = await _httpClient.GetAsync("/Products/list-products");
             var content = await response.Content.ReadAsStringAsync();
-
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-            var result = JsonSerializer.Deserialize<ResponseModels<List<Products>>>(content, options);
+            var result = JsonConvert.DeserializeObject<ResponseModels<List<Products>>>(content);
 
             return result ?? new ResponseModels<List<Products>>
             {
                 Code = (int)response.StatusCode,
-                Message = "Không thể lấy dữ liệu",
+                Message = "Không thể lấy danh sách sản phẩm",
                 IsSuccessed = false,
                 Data = new List<Products>()
             };
         }
 
-        public Task<Products> GetProductById(int id)
+        public async Task<ResponseModels<Products>> GetProductById(int id)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsync($"/Products/Detail/{id}", null);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<ResponseModels<Products>>(content);
+
+            return result ?? new ResponseModels<Products>
+            {
+                Code = (int)response.StatusCode,
+                Message = "Không thể lấy thông tin sản phẩm",
+                IsSuccessed = false,
+                Data = null,
+            };
         }
 
-        public Task<bool> InsertProduct(Products product)
+        public async Task<ResponseModels<Products>> InsertProduct(Products product)
         {
-            throw new NotImplementedException();
+            var json = JsonConvert.SerializeObject(product);
+            var contentData = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("/Products/Insert", contentData);
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ResponseModels<Products>>(content);
+
+            return result ?? new ResponseModels<Products>
+            {
+                Code = (int)response.StatusCode,
+                Message = "Không thể thêm sản phẩm mới",
+                IsSuccessed = false,
+                Data = null,
+            };
         }
 
-        public Task<List<Products>> SearchByName(string keyword)
+        public async Task<ResponseModels<Products>> UpdateProduct(int id, Products updatedProduct)
         {
-            throw new NotImplementedException();
+            var json = JsonConvert.SerializeObject(updatedProduct);
+            var contentData = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"/Products/Update/{id}", contentData);
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ResponseModels<Products>>(content);
+
+            return result ?? new ResponseModels<Products>
+            {
+                Code = (int)response.StatusCode,
+                Message = "Không thể cập nhật sản phẩm",
+                IsSuccessed = false,
+                Data = null,
+            };
         }
 
-        public Task<bool> UpdateProduct(int id, Products updatedProduct)
+        public async Task<ResponseModels<Products>> DeleteProduct(int id)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.DeleteAsync($"/Products/Delete/{id}");
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ResponseModels<Products>>(content);
+
+            return result ?? new ResponseModels<Products>
+            {
+                Code = (int)response.StatusCode,
+                Message = "Không thể xoá sản phẩm",
+                IsSuccessed = false,
+                Data = null,
+            };
         }
 
-        Task<bool> IProductService.DeleteProducts(int id)
+        public async Task<ResponseModels<List<Products>>> SearchByName(string keyword)
         {
-            throw new NotImplementedException();
-        }
+            var response = await _httpClient.PostAsync($"/Products/Search?keyword={keyword}", null);
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ResponseModels<List<Products>>>(content);
 
+            return result ?? new ResponseModels<List<Products>>
+            {
+                Code = (int)response.StatusCode,
+                Message = "Không thể tìm kiếm sản phẩm",
+                IsSuccessed = false,
+                Data = new List<Products>(),
+            };
+        }
     }
 }
-

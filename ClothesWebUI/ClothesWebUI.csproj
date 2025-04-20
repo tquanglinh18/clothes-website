@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <None Remove="LibsServices\" />
+    <None Remove="Constants\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="LibsServices\" />
+    <Folder Include="Constants\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

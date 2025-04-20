@@ -1,7 +1,4 @@
-﻿using System;
-using ClothesWebUI.Models;
-
-namespace ClothesWebAPI.Models
+﻿namespace ClothesWebUI.Models
 {
 	public class ResponseModels<T>
 	{

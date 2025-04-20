@@ -1,20 +1,19 @@
-﻿using ClothesWebAPI.Models;
-using ClothesWebUI.Models;
+﻿using ClothesWebUI.Models;
 
 namespace ClothesWebUI.LibsServices
 {
     public interface IProductService
     {
-        Task<ResponseModels<List<Products>>> GetAllProductsAsync();
+        Task<ResponseModels<List<Products>>> GetAllProducts();
 
-        Task<Products> GetProductById(int id);
+        Task<ResponseModels<Products>> GetProductById(int id);
 
-        Task<bool> InsertProduct(Products product);
+        Task<ResponseModels<Products>> InsertProduct(Products product);
 
-        Task<bool> UpdateProduct(int id, Products updatedProduct);
+        Task<ResponseModels<Products>> UpdateProduct(int id, Products updatedProduct);
 
-        Task<bool> DeleteProducts(int id);
+        Task<ResponseModels<Products>> DeleteProduct(int id);
 
-        Task<List<Products>> SearchByName(string keyword);
+        Task<ResponseModels<List<Products>>> SearchByName(string keyword);
     }
 }
