@@ -123,6 +123,41 @@ public class HomeController : Controller
 
     }
 
+    public async Task<IActionResult> Detail(int id)
+    {
+        var result = await _productService.GetProductById(id);
+
+        if (result.Code != (int)ResponseCode.OK)
+        {
+            return Error();
+        }
+
+        return View(result.Data);
+
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchByName(string keyword)
+    {
+        if (string.IsNullOrWhiteSpace(keyword))
+        {
+            ModelState.AddModelError("", "Vui lòng nhập từ khóa tìm kiếm.");
+            var result = await _productService.GetAllProducts();
+            return View("Index", result.Data);
+        }
+
+        var searchResult = await _productService.SearchByName(keyword);
+
+        if (searchResult.IsSuccessed && searchResult.Data != null && searchResult.Data.Any())
+        {
+            ViewBag.SearchKeyword = keyword;
+            return View("Index", searchResult.Data);
+        }
+
+        ViewBag.Error = "Không tìm thấy sản phẩm nào phù hợp.";
+        return View("Index", new List<Products>());
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
