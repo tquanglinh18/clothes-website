@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ClothesWebUI.Models;
 using ClothesWebUI.LibsServices;
+using System.IO.Pipelines;
+using ClothesWebUI.Constants;
+using System.Reflection;
 
 namespace ClothesWebUI.Controllers;
 
@@ -43,6 +46,26 @@ public class HomeController : Controller
         return View(prodEdit.Data);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditPost([FromForm] Products prod)
+    {
+        if (ModelState.IsValid)
+        {
+            var response = await _productService.UpdateProduct(prod);
+
+            if (response != null && response.IsSuccessed && response.Code == (int)ResponseCode.OK)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", response?.Message ?? "Cập nhật thất bại!");
+            }
+        }
+
+        return View("Edit", prod);
+    }
 
     [HttpGet]
     public IActionResult Insert()
@@ -52,17 +75,52 @@ public class HomeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Insert([FromForm] Products model)
+    public async Task<IActionResult> InsertPost([FromForm] Products model)
     {
         if (ModelState.IsValid)
         {
-            // Lưu dữ liệu vào DB ở đây
+            var prodInput = new Products
+            {
+                ProductName = model.ProductName,
+                Description = model.Description,
+                Price = model.Price,
+                Quantity = model.Quantity,
+            };
 
-            return RedirectToAction("Index");
+            var response = await _productService.InsertProduct(prodInput);
+
+            if (response != null && response.IsSuccessed && response.Code == (int)ResponseCode.OK)
+            {
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", response?.Message ?? "Lỗi không xác định!");
+            }
+        }
+        return View("Insert", model);
+    }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        var temp = await _productService.GetProductById(id);
+
+        if (temp != null)
+        {
+            await _productService.DeleteProduct(id);
         }
 
-        // Nếu có lỗi validation thì trả lại view với dữ liệu cũ
-        return View("Insert",model);
+        lstProducts = await _productService.GetAllProducts();
+
+        if (!lstProducts.IsSuccessed)
+        {
+            ViewBag.Error = lstProducts.Message;
+            return RedirectToAction("Error");
+        }
+
+        return RedirectToAction("Index");
+
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

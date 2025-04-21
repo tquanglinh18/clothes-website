@@ -62,11 +62,11 @@ namespace ClothesWebUI.LibsServices
             };
         }
 
-        public async Task<ResponseModels<Products>> UpdateProduct(int id, Products updatedProduct)
+        public async Task<ResponseModels<Products>> UpdateProduct(Products updatedProduct)
         {
             var json = JsonConvert.SerializeObject(updatedProduct);
             var contentData = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync($"/Products/Update/{id}", contentData);
+            var response = await _httpClient.PostAsync($"/Products/Update/{updatedProduct.ProductID}", contentData);
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<ResponseModels<Products>>(content);
 

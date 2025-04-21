@@ -8,7 +8,7 @@
 
 <h2>Thêm sản phẩm</h2>
 
-<form action="/Home/Insert" method="post">
+<form asp-controller="Home" asp-action="InsertPost" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">

@@ -10,7 +10,7 @@ namespace ClothesWebUI.LibsServices
 
         Task<ResponseModels<Products>> InsertProduct(Products product);
 
-        Task<ResponseModels<Products>> UpdateProduct(int id, Products updatedProduct);
+        Task<ResponseModels<Products>> UpdateProduct(Products updatedProduct);
 
         Task<ResponseModels<Products>> DeleteProduct(int id);
 
